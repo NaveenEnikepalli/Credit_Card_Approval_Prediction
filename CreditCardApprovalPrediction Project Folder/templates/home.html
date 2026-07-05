@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - ApexCredit Eligibility Portal{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-bg-overlay"></div>
+    <div class="hero-container">
+        <div class="hero-content">
+            <span class="hero-badge animate-fade-in">Instant Eligibility Portal</span>
+            <h1 class="hero-title animate-slide-up">Check Your Credit Card Eligibility Instantly</h1>
+            <p class="hero-subtitle animate-slide-up-delayed">
+                A secure, digital portal designed to evaluate your credit card eligibility before you apply. Find matching credit levels while protecting your credit score from hard inquiries.
+            </p>
+            <div class="hero-actions animate-slide-up-delayed">
+                <a href="{{ url_for('predict') }}" class="btn btn-primary" id="btn-get-started">Get Started</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Overview Section -->
+<section id="about" class="section about-section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Overview</span>
+            <h2 class="section-title">Empowering Smart Credit Choices</h2>
+            <div class="section-divider"></div>
+        </div>
+        <div class="about-grid">
+            <div class="about-text">
+                <h3>Why You Should Check Eligibility Before Applying</h3>
+                <p>
+                    Checking your credit card eligibility before submitting a formal application is a smart financial move. Every official application triggers a hard check on your credit file, which can temporarily lower your credit score. By pre-assessing your profile, you protect your credit record from unnecessary inquiries.
+                </p>
+                <p>
+                    Our secure portal evaluates how well your profile matches standard credit criteria in real time. This allows you to identify areas of improvement, prepare your application documents efficiently, and choose credit limits that fit your actual financial standing.
+                </p>
+            </div>
+            <div class="about-metrics">
+                <div class="metric-card">
+                    <span class="metric-num">50k+</span>
+                    <span class="metric-label">Assessments Completed</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-num">Instant</span>
+                    <span class="metric-label">Eligibility Decisions</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="section features-section bg-alt">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Key Benefits</span>
+            <h2 class="section-title">Designed for Modern Applicants</h2>
+            <div class="section-divider"></div>
+        </div>
+        <div class="features-grid">
+            <!-- Card 1 -->
+            <div class="feature-card">
+                <div class="feature-icon">📋</div>
+                <h3 class="feature-title">Instant Eligibility Check</h3>
+                <p class="feature-desc">
+                    Evaluate your credentials instantly against baseline banking metrics to understand your approval prospects.
+                </p>
+            </div>
+            <!-- Card 2 -->
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3 class="feature-title">Secure Information Processing</h3>
+                <p class="feature-desc">
+                    Bank-grade end-to-end data encryption ensures that your demographic, housing, and financial entries remain protected.
+                </p>
+            </div>
+            <!-- Card 3 -->
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3 class="feature-title">Quick Assessment</h3>
+                <p class="feature-desc">
+                    Receive immediate, interactive feedback on your eligibility status in a matter of seconds.
+                </p>
+            </div>
+            <!-- Card 4 -->
+            <div class="feature-card">
+                <div class="feature-icon">📈</div>
+                <h3 class="feature-title">Professional Decision Support</h3>
+                <p class="feature-desc">
+                    Analyze multiple structural aspects of your financial details (income, occupation, debt ratios) for balanced advice.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Workflow Section -->
+<section class="section workflow-section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Assessment Process</span>
+            <h2 class="section-title">Application Review Workflow</h2>
+            <div class="section-divider"></div>
+        </div>
+        <div class="workflow-timeline">
+            <!-- Step 1 -->
+            <div class="workflow-step">
+                <div class="step-num">01</div>
+                <div class="step-content">
+                    <h3 class="step-title">Applicant Information</h3>
+                    <p class="step-desc">Enter key professional, financial, and personal details securely into the eligibility form.</p>
+                </div>
+            </div>
+            
+            <div class="workflow-connector">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 5V19M12 19L19 12M12 19L5 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="workflow-step">
+                <div class="step-num">02</div>
+                <div class="step-content">
+                    <h3 class="step-title">Application Review</h3>
+                    <p class="step-desc">Your profile is reviewed and checked for completeness and formatting compatibility.</p>
+                </div>
+            </div>
+
+            <div class="workflow-connector">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 5V19M12 19L19 12M12 19L5 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="workflow-step">
+                <div class="step-num">03</div>
+                <div class="step-content">
+                    <h3 class="step-title">Eligibility Assessment</h3>
+                    <p class="step-desc">The system checks your criteria against established indicators to evaluate approval eligibility.</p>
+                </div>
+            </div>
+
+            <div class="workflow-connector">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 5V19M12 19L19 12M12 19L5 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="workflow-step">
+                <div class="step-num">04</div>
+                <div class="step-content">
+                    <h3 class="step-title">Assessment Result</h3>
+                    <p class="step-desc">Receive an instant estimate of your eligibility score, level rating, and strategic options.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/home.js') }}"></script>
+{% endblock %}

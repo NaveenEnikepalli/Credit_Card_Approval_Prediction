@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ApexCredit Eligibility Assessment Portal. A secure, real-time application for evaluating applicant credit eligibility.">
+    <title>{% block title %}ApexCredit - Credit Card Eligibility Portal{% endblock %}</title>
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Base Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <header class="navbar-header">
+        <div class="nav-container">
+            <a href="{{ url_for('home') }}" class="nav-logo">
+                <span class="logo-icon">▲</span> ApexCredit
+            </a>
+            <nav class="nav-menu">
+                <a href="{{ url_for('home') }}" class="nav-link {% if request.path == url_for('home') %}active{% endif %}">Home</a>
+                <a href="{{ url_for('predict') }}" class="nav-link {% if request.path == url_for('predict') %}active{% endif %}">Check Eligibility</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-wrapper">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <span class="logo-icon">▲</span> ApexCredit
+            </div>
+            <p class="footer-title">Credit Card Eligibility Portal</p>
+            <p class="footer-subtitle">Helping users assess their eligibility quickly, securely, and conveniently.</p>
+            <div class="footer-bottom">
+                <p>&copy; 2026 ApexCredit. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

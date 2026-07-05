@@ -1,0 +1,346 @@
+{% extends 'base.html' %}
+
+{% block title %}Check Eligibility - ApexCredit{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/predict.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="prediction-section">
+    <div class="prediction-container">
+        <!-- Form Header -->
+        <div class="form-header-box">
+            <span class="form-badge">Online Eligibility Check</span>
+            <h1 class="form-title">Credit Card Eligibility Portal</h1>
+            <p class="form-subtitle">Enter applicant professional, financial, and demographic details below to check card approval eligibility.</p>
+        </div>
+
+        <!-- Form Card wrapper -->
+        <div class="form-card">
+            {% if error_alert %}
+            <div class="alert-box error-alert-box" style="background-color: #fef2f2; border: 1px solid #fca5a5; border-radius: 6px; padding: 16px; margin-bottom: 24px; color: #b91c1c; font-family: var(--font-title); font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                <span>⚠️</span> {{ error_alert }}
+            </div>
+            {% endif %}
+            <form id="prediction-form" action="{{ url_for('predict') }}" method="POST" novalidate>
+                
+                <!-- SECTION 1: APPLICANT PROFILE -->
+                <fieldset class="form-group-section">
+                    <legend class="section-legend"><span class="legend-num">1</span> Applicant Profile</legend>
+                    <div class="form-grid">
+                        <!-- Gender -->
+                        <div class="form-field">
+                            <label for="code_gender">Gender <span class="required">*</span>
+                                <span class="field-tooltip" title="Biological gender of the applicant.">?</span>
+                            </label>
+                            <select id="code_gender" name="CODE_GENDER" required>
+                                <option value="" disabled selected>Select Gender</option>
+                                <option value="F">Female</option>
+                                <option value="M">Male</option>
+                                <option value="XNA">Other / Undisclosed</option>
+                            </select>
+                            <span class="error-msg" id="error-code_gender"></span>
+                        </div>
+                        
+                        <!-- Own Car -->
+                        <div class="form-field">
+                            <label for="flag_own_car">Owns a Car? <span class="required">*</span>
+                                <span class="field-tooltip" title="Indicates whether the applicant owns a personal vehicle.">?</span>
+                            </label>
+                            <select id="flag_own_car" name="FLAG_OWN_CAR" required>
+                                <option value="" disabled selected>Select Option</option>
+                                <option value="Y">Yes</option>
+                                <option value="N">No</option>
+                            </select>
+                            <span class="error-msg" id="error-flag_own_car"></span>
+                        </div>
+
+                        <!-- Own Realty -->
+                        <div class="form-field">
+                            <label for="flag_own_realty">Owns Real Estate / Property? <span class="required">*</span>
+                                <span class="field-tooltip" title="Indicates whether the applicant owns real estate property or house.">?</span>
+                            </label>
+                            <select id="flag_own_realty" name="FLAG_OWN_REALTY" required>
+                                <option value="" disabled selected>Select Option</option>
+                                <option value="Y">Yes</option>
+                                <option value="N">No</option>
+                            </select>
+                            <span class="error-msg" id="error-flag_own_realty"></span>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- SECTION 2: PERSONAL DEMOGRAPHICS -->
+                <fieldset class="form-group-section">
+                    <legend class="section-legend"><span class="legend-num">2</span> Personal Demographics</legend>
+                    <div class="form-grid">
+                        <!-- Age -->
+                        <div class="form-field">
+                            <label for="age_years">Age (Years) <span class="required">*</span>
+                                <span class="field-tooltip" title="Applicant's current age. Acceptable range is 18 to 100 years.">?</span>
+                            </label>
+                            <input type="number" id="age_years" name="AGE_YEARS" placeholder="e.g. 35" min="18" max="100" required>
+                            <span class="field-helper">Allowed: 18 – 100 years</span>
+                            <span class="error-msg" id="error-age_years"></span>
+                        </div>
+
+                        <!-- Employment Years -->
+                        <div class="form-field">
+                            <label for="employment_years">Employment Duration (Years) <span class="required">*</span>
+                                <span class="field-tooltip" title="Length of current professional employment in years. Max limit: 60 years. Enter 0 if unemployed.">?</span>
+                            </label>
+                            <input type="number" id="employment_years" name="EMPLOYMENT_YEARS" step="0.1" placeholder="e.g. 5.5" min="0" max="60" required>
+                            <span class="field-helper">Allowed: 0 – 60 years</span>
+                            <span class="error-msg" id="error-employment_years"></span>
+                        </div>
+
+                        <!-- Children -->
+                        <div class="form-field">
+                            <label for="cnt_children">Number of Children <span class="required">*</span>
+                                <span class="field-tooltip" title="Total count of applicant's children. Maximum accepted is 20.">?</span>
+                            </label>
+                            <input type="number" id="cnt_children" name="CNT_CHILDREN" placeholder="e.g. 0" min="0" max="20" required>
+                            <span class="field-helper">Allowed: 0 – 20</span>
+                            <span class="error-msg" id="error-cnt_children"></span>
+                        </div>
+
+                        <!-- Family Members -->
+                        <div class="form-field">
+                            <label for="cnt_fam_members">Family Size <span class="required">*</span>
+                                <span class="field-tooltip" title="Total family members in the applicant's household. Range: 1 to 20.">?</span>
+                            </label>
+                            <input type="number" id="cnt_fam_members" name="CNT_FAM_MEMBERS" placeholder="e.g. 2" min="1" max="20" required>
+                            <span class="field-helper">Allowed: 1 – 20</span>
+                            <span class="error-msg" id="error-cnt_fam_members"></span>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- SECTION 3: FINANCIAL STANDING -->
+                <fieldset class="form-group-section">
+                    <legend class="section-legend"><span class="legend-num">3</span> Financial Standing</legend>
+                    <div class="form-grid">
+                        <!-- Income -->
+                        <div class="form-field">
+                            <label for="amt_income_total">Annual Income (₹) <span class="required">*</span>
+                                <span class="field-tooltip" title="Total annual income in INR. Must be greater than zero.">?</span>
+                            </label>
+                            <input type="number" id="amt_income_total" name="AMT_INCOME_TOTAL" placeholder="e.g. 900000" min="1" required>
+                            <span class="field-helper">Must be greater than 0</span>
+                            <span class="error-msg" id="error-amt_income_total"></span>
+                        </div>
+
+                        <!-- Credit Amount -->
+                        <div class="form-field">
+                            <label for="amt_credit">Requested Credit Limit (₹) <span class="required">*</span>
+                                <span class="field-tooltip" title="Total requested credit line limit. Must be greater than zero.">?</span>
+                            </label>
+                            <input type="number" id="amt_credit" name="AMT_CREDIT" placeholder="e.g. 250000" min="1" required>
+                            <span class="field-helper">Must be greater than 0</span>
+                            <span class="error-msg" id="error-amt_credit"></span>
+                        </div>
+
+                        <!-- Loan Annuity -->
+                        <div class="form-field">
+                            <label for="amt_annuity">Monthly EMI / Annuity (₹) <span class="required">*</span>
+                                <span class="field-tooltip" title="Estimated monthly or annual payment due for the card. Must be greater than zero.">?</span>
+                            </label>
+                            <input type="number" id="amt_annuity" name="AMT_ANNUITY" placeholder="e.g. 15000" min="1" required>
+                            <span class="field-helper">Must be greater than 0</span>
+                            <span class="error-msg" id="error-amt_annuity"></span>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- SECTION 4: PROFESSIONAL CREDENTIALS -->
+                <fieldset class="form-group-section">
+                    <legend class="section-legend"><span class="legend-num">4</span> Professional Credentials</legend>
+                    <div class="form-grid">
+                        <!-- Income Type -->
+                        <div class="form-field">
+                            <label for="name_income_type">Income Source Type <span class="required">*</span>
+                                <span class="field-tooltip" title="Primary category of applicant's income.">?</span>
+                            </label>
+                            <select id="name_income_type" name="NAME_INCOME_TYPE" required>
+                                <option value="" disabled selected>Select Income Type</option>
+                                <option value="Working">Working</option>
+                                <option value="Commercial associate">Commercial associate</option>
+                                <option value="State servant">State servant</option>
+                                <option value="Pensioner">Pensioner</option>
+                                <option value="Unemployed">Unemployed</option>
+                                <option value="Student">Student</option>
+                                <option value="Businessman">Businessman</option>
+                                <option value="Maternity leave">Maternity leave</option>
+                            </select>
+                            <span class="error-msg" id="error-name_income_type"></span>
+                        </div>
+
+                        <!-- Education Type -->
+                        <div class="form-field">
+                            <label for="name_education_type">Education Level <span class="required">*</span>
+                                <span class="field-tooltip" title="Highest educational degree achieved.">?</span>
+                            </label>
+                            <select id="name_education_type" name="NAME_EDUCATION_TYPE" required>
+                                <option value="" disabled selected>Select Education</option>
+                                <option value="Secondary / secondary special">Secondary / secondary special</option>
+                                <option value="Higher education">Higher education</option>
+                                <option value="Incomplete higher">Incomplete higher</option>
+                                <option value="Lower secondary">Lower secondary</option>
+                                <option value="Academic degree">Academic degree</option>
+                            </select>
+                            <span class="error-msg" id="error-name_education_type"></span>
+                        </div>
+
+                        <!-- Family Status -->
+                        <div class="form-field">
+                            <label for="name_family_status">Civil Status <span class="required">*</span>
+                                <span class="field-tooltip" title="Marital/family relationship status.">?</span>
+                            </label>
+                            <select id="name_family_status" name="NAME_FAMILY_STATUS" required>
+                                <option value="" disabled selected>Select Relationship Status</option>
+                                <option value="Married">Married</option>
+                                <option value="Single / not married">Single / not married</option>
+                                <option value="Civil marriage">Civil marriage</option>
+                                <option value="Separated">Separated</option>
+                                <option value="Widow">Widow</option>
+                                <option value="Unknown">Unknown</option>
+                            </select>
+                            <span class="error-msg" id="error-name_family_status"></span>
+                        </div>
+
+                        <!-- Housing Type -->
+                        <div class="form-field">
+                            <label for="name_housing_type">Residential Housing Type <span class="required">*</span>
+                                <span class="field-tooltip" title="Primary residential structure setup.">?</span>
+                            </label>
+                            <select id="name_housing_type" name="NAME_HOUSING_TYPE" required>
+                                <option value="" disabled selected>Select Housing Type</option>
+                                <option value="House / apartment">House / apartment</option>
+                                <option value="With parents">With parents</option>
+                                <option value="Municipal apartment">Municipal apartment</option>
+                                <option value="Rented apartment">Rented apartment</option>
+                                <option value="Office apartment">Office apartment</option>
+                                <option value="Co-op apartment">Co-op apartment</option>
+                            </select>
+                            <span class="error-msg" id="error-name_housing_type"></span>
+                        </div>
+
+                        <!-- Organization Type -->
+                        <div class="form-field form-field-full">
+                            <label for="organization_type">Employment Industry / Organization <span class="required">*</span>
+                                <span class="field-tooltip" title="The industry or type of organization where the applicant works.">?</span>
+                            </label>
+                            <select id="organization_type" name="ORGANIZATION_TYPE" required>
+                                <option value="" disabled selected>Select Organization Category</option>
+                                <option value="Business Entity Type 3">Business Entity Type 3</option>
+                                <option value="Self-employed">Self-employed</option>
+                                <option value="Other">Other</option>
+                                <option value="Medicine">Medicine</option>
+                                <option value="Government">Government</option>
+                                <option value="School">School</option>
+                                <option value="Trade: type 7">Trade: type 7</option>
+                                <option value="Kindergarten">Kindergarten</option>
+                                <option value="Construction">Construction</option>
+                                <option value="Business Entity Type 2">Business Entity Type 2</option>
+                                <option value="Transport: type 4">Transport: type 4</option>
+                                <option value="Trade: type 3">Trade: type 3</option>
+                                <option value="Industry: type 9">Industry: type 9</option>
+                                <option value="Security">Security</option>
+                                <option value="Housing">Housing</option>
+                                <option value="Military">Military</option>
+                                <option value="Bank">Bank</option>
+                                <option value="Police">Police</option>
+                                <option value="Business Entity Type 1">Business Entity Type 1</option>
+                                <option value="Transport: type 2">Transport: type 2</option>
+                                <option value="Agriculture">Agriculture</option>
+                                <option value="Postal">Postal</option>
+                                <option value="Security Ministries">Security Ministries</option>
+                                <option value="University">University</option>
+                                <option value="Restaurant">Restaurant</option>
+                                <option value="Transport: type 3">Transport: type 3</option>
+                                <option value="Electricity">Electricity</option>
+                                <option value="Hotel">Hotel</option>
+                                <option value="Industry: type 11">Industry: type 11</option>
+                                <option value="Trade: type 6">Trade: type 6</option>
+                                <option value="Insurance">Insurance</option>
+                                <option value="Industry: type 1">Industry: type 1</option>
+                                <option value="Telecom">Telecom</option>
+                                <option value="Realtor">Realtor</option>
+                                <option value="Emergency">Emergency</option>
+                                <option value="Industry: type 3">Industry: type 3</option>
+                                <option value="Legal Services">Legal Services</option>
+                                <option value="Trade: type 2">Trade: type 2</option>
+                                <option value="Industry: type 7">Industry: type 7</option>
+                                <option value="Services">Services</option>
+                                <option value="Transport: type 1">Transport: type 1</option>
+                                <option value="Industry: type 5">Industry: type 5</option>
+                                <option value="Culture">Culture</option>
+                                <option value="Mobile">Mobile</option>
+                                <option value="Trade: type 1">Trade: type 1</option>
+                                <option value="Industry: type 2">Industry: type 2</option>
+                                <option value="Trade: type 5">Trade: type 5</option>
+                                <option value="Cleaning">Cleaning</option>
+                                <option value="Industry: type 4">Industry: type 4</option>
+                                <option value="Industry: type 12">Industry: type 12</option>
+                                <option value="Advertsing">Advertising</option>
+                                <option value="Trade: type 4">Trade: type 4</option>
+                                <option value="Industry: type 13">Industry: type 13</option>
+                                <option value="Industry: type 10">Industry: type 10</option>
+                                <option value="Industry: type 8">Industry: type 8</option>
+                                <option value="Industry: type 6">Industry: type 6</option>
+                                <option value="Religion">Religion</option>
+                                <option value="XNA">XNA (Unemployed / Pensioner / Other)</option>
+                            </select>
+                            <span class="error-msg" id="error-organization_type"></span>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- SECTION 5: COMPLIANCE & RISK METADATA -->
+                <fieldset class="form-group-section">
+                    <legend class="section-legend"><span class="legend-num">5</span> Compliance & Risk Metadata</legend>
+                    <div class="form-grid">
+                        <!-- Region Rating -->
+                        <div class="form-field">
+                            <label for="region_rating_client">Region Development Rating <span class="required">*</span>
+                                <span class="field-tooltip" title="Internal ranking score of client's residential region. (1: High development, 3: Lower development)">?</span>
+                            </label>
+                            <select id="region_rating_client" name="REGION_RATING_CLIENT" required>
+                                <option value="" disabled selected>Select Region Rating</option>
+                                <option value="1">Rating 1 (Highly Developed)</option>
+                                <option value="2">Rating 2 (Average development)</option>
+                                <option value="3">Rating 3 (Low development)</option>
+                            </select>
+                            <span class="error-msg" id="error-region_rating_client"></span>
+                        </div>
+
+                        <!-- Credit Bureau Requests -->
+                        <div class="form-field">
+                            <label for="amt_req_credit_bureau_year">Credit Bureau Queries (Last Year) <span class="required">*</span>
+                                <span class="field-tooltip" title="Total inquiry requests made to credit bureau databases regarding the client. Must be 0 or greater.">?</span>
+                            </label>
+                            <input type="number" id="amt_req_credit_bureau_year" name="AMT_REQ_CREDIT_BUREAU_YEAR" placeholder="e.g. 1" min="0" required>
+                            <span class="field-helper">Allowed: 0 or greater</span>
+                            <span class="error-msg" id="error-amt_req_credit_bureau_year"></span>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- FORM BUTTONS -->
+                <div class="form-buttons-container">
+                    <button type="submit" class="btn btn-primary" id="btn-predict">
+                        <span class="btn-text">Assess Credit Eligibility</span>
+                        <span class="btn-spinner hidden"></span>
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="btn-reset">Reset Form</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/predict.js') }}"></script>
+{% endblock %}
