@@ -61,16 +61,40 @@ def train_random_forest(X_train, y_train):
 
 def train_xgboost(X_train, y_train, scale_pos_weight):
     """
-    Trains an XGBoost Classifier on the training set using the computed scale_pos_weight.
+    Trains an XGBoost Classifier on the training set using the computed scale_pos_weight
+    and monotonic constraints to ensure logical risk predictions.
     """
-    print(f"[MODEL TRAINING] Training XGBoost Classifier (scale_pos_weight={scale_pos_weight:.4f})...")
+    print(f"[MODEL TRAINING] Training XGBoost Classifier (scale_pos_weight={scale_pos_weight:.4f}) with monotonic constraints...")
+    
+    constraints = {
+        'CNT_CHILDREN': 1,
+        'CNT_FAM_MEMBERS': 1,
+        'REGION_RATING_CLIENT': 1,
+        'AMT_REQ_CREDIT_BUREAU_YEAR': 1,
+        'ANNUITY_TO_INCOME_RATIO': 1,
+        'AGE_YEARS': -1,
+        'EMPLOYMENT_YEARS': -1,
+        'AMT_INCOME_TOTAL': -1,
+        'AMT_CREDIT': -1,
+        'INCOME_TO_CREDIT_RATIO': -1,
+        'CREDIT_TO_ANNUITY_RATIO': -1,
+        'INCOME_PER_FAMILY_MEMBER': -1
+    }
+    
+    # Map features to constraints corresponding to the column order of X_train
+    mono_list = []
+    for col in X_train.columns:
+        mono_list.append(constraints.get(col, 0))
+    mono_str = "(" + ",".join(map(str, mono_list)) + ")"
+    
     model = XGBClassifier(
         n_estimators=100, 
         max_depth=6, 
         scale_pos_weight=scale_pos_weight, 
         random_state=42, 
         eval_metric='logloss', 
-        n_jobs=-1
+        n_jobs=-1,
+        monotone_constraints=mono_str
     )
     model.fit(X_train, y_train)
     return model

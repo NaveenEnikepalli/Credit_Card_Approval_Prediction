@@ -1,11 +1,11 @@
 {
-    "best_model": "XGBoost",
-    "accuracy": 0.6739731373377996,
-    "balanced_accuracy": 0.6223221012051726,
-    "precision": 0.13479881857357284,
-    "recall": 0.5607250755287009,
-    "f1_score": 0.21734717776563353,
-    "roc_auc": 0.668511685169437,
-    "training_date": "2026-07-05 11:58:40",
+    "best_model": "Random Forest",
+    "accuracy": 0.6878272464145175,
+    "balanced_accuracy": 0.6230598428291907,
+    "precision": 0.13789243372513102,
+    "recall": 0.5458207452165156,
+    "f1_score": 0.22016410756357138,
+    "roc_auc": 0.6729722103153968,
+    "training_date": "2026-07-07 20:43:01",
     "dataset_name": "CreditCardApproval_Selected_Features.csv"
 }

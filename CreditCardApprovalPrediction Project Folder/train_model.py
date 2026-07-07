@@ -142,15 +142,18 @@ def main():
         X_train, X_test, numerical_cols
     )
     
-    # 14. Save encoders and scaler using Joblib into models/
+    # 14. Save encoders, scaler, and feature columns using Joblib into models/
     encoder_save_path = os.path.join(models_dir, "encoder.pkl")
     scaler_save_path = os.path.join(models_dir, "scaler.pkl")
+    feature_cols_save_path = os.path.join(models_dir, "feature_columns.pkl")
     
     print("\n" + "-"*40 + " SERIALIZATION " + "-"*40)
     joblib.dump(encoders, encoder_save_path)
     print(f"[SERIALIZATION] Saved LabelEncoders to: {encoder_save_path}")
     joblib.dump(scaler, scaler_save_path)
     print(f"[SERIALIZATION] Saved StandardScaler to: {scaler_save_path}")
+    joblib.dump(X.columns.tolist(), feature_cols_save_path)
+    print(f"[SERIALIZATION] Saved Feature Columns list to: {feature_cols_save_path}")
     
     # ===== START PHASE 4.5: MODEL RETRAINING WITH IMBALANCE HANDLED =====
     print("\n" + "="*80)

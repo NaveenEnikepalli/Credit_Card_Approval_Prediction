@@ -41,6 +41,21 @@ def perform_feature_engineering(df):
     if 'AGE_YEARS' in df_engineered.columns:
         print(f"[FEATURE ENGINEERING] 'AGE_YEARS' verified. Range: {df_engineered['AGE_YEARS'].min():.1f} to {df_engineered['AGE_YEARS'].max():.1f} years.")
     if 'EMPLOYMENT_YEARS' in df_engineered.columns:
-        print(f"[FEATURE ENGINEERING] 'EMPLOYMENT_YEARS' verified. Range: {df_engineered['EMPLOYMENT_YEARS'].min():.1f} to {df_engineered['EMPLOYMENT_YEARS'].max():.1f} years.")
+        print("[FEATURE ENGINEERING] Cleaning negative values of 'EMPLOYMENT_YEARS' (capping outliers to 0.0)...")
+        df_engineered['EMPLOYMENT_YEARS'] = df_engineered['EMPLOYMENT_YEARS'].apply(
+            lambda x: 0.0 if x < 0 else x
+        )
+        print(f"[FEATURE ENGINEERING] 'EMPLOYMENT_YEARS' verified. Cleaned Range: {df_engineered['EMPLOYMENT_YEARS'].min():.1f} to {df_engineered['EMPLOYMENT_YEARS'].max():.1f} years.")
+        
+    # Engineer new ratio features
+    print("[FEATURE ENGINEERING] Engineering new credit risk ratio features...")
+    df_engineered['ANNUITY_TO_INCOME_RATIO'] = df_engineered['AMT_ANNUITY'] / (df_engineered['AMT_INCOME_TOTAL'] + 1e-5)
+    df_engineered['INCOME_TO_CREDIT_RATIO'] = df_engineered['AMT_INCOME_TOTAL'] / (df_engineered['AMT_CREDIT'] + 1e-5)
+    df_engineered['CREDIT_TO_ANNUITY_RATIO'] = df_engineered['AMT_CREDIT'] / (df_engineered['AMT_ANNUITY'] + 1e-5)
+    df_engineered['INCOME_PER_FAMILY_MEMBER'] = df_engineered['AMT_INCOME_TOTAL'] / (df_engineered['CNT_FAM_MEMBERS'] + 1e-5)
+    
+    # Fill any NaNs created by division or missing inputs
+    for col in ['ANNUITY_TO_INCOME_RATIO', 'INCOME_TO_CREDIT_RATIO', 'CREDIT_TO_ANNUITY_RATIO', 'INCOME_PER_FAMILY_MEMBER']:
+        df_engineered[col] = df_engineered[col].fillna(0.0)
         
     return df_engineered

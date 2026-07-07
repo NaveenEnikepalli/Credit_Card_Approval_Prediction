@@ -132,39 +132,50 @@ def predict():
                 'NAME_HOUSING_TYPE', 'ORGANIZATION_TYPE'
             ]
             
-            for col in registry.feature_columns:
-                if col in categorical_cols:
-                    val = form_data[col]
-                    # Verify category matches fitted encoder vocabulary
-                    encoder = registry.encoders.get(col)
-                    if encoder is None:
-                        raise ValueError(f"System Configuration Error: Encoder for '{col}' is missing.")
-                    
-                    if val in encoder.classes_:
-                        features_dict[col] = encoder.transform([val])[0]
-                    elif val + ' ' in encoder.classes_: # Handle minor spacing mismatches if any
-                        features_dict[col] = encoder.transform([val + ' '])[0]
-                    else:
-                        raise ValueError(f"Category '{val}' is invalid for input field '{col.replace('_', ' ').title()}'.")
+            # Map and encode categorical columns
+            for col in categorical_cols:
+                val = form_data[col]
+                encoder = registry.encoders.get(col)
+                if encoder is None:
+                    raise ValueError(f"System Configuration Error: Encoder for '{col}' is missing.")
+                
+                if val in encoder.classes_:
+                    features_dict[col] = encoder.transform([val])[0]
+                elif val + ' ' in encoder.classes_: # Handle minor spacing mismatches if any
+                    features_dict[col] = encoder.transform([val + ' '])[0]
                 else:
-                    # Assign numerical column types
-                    features_dict[col] = float(form_data[col])
-
+                    raise ValueError(f"Category '{val}' is invalid for input field '{col.replace('_', ' ').title()}'.")
+            
+            # Map raw numerical columns
+            basic_numerical_cols = [
+                'CNT_CHILDREN', 'CNT_FAM_MEMBERS', 'AGE_YEARS', 'EMPLOYMENT_YEARS',
+                'AMT_INCOME_TOTAL', 'AMT_CREDIT', 'AMT_ANNUITY', 'REGION_RATING_CLIENT',
+                'AMT_REQ_CREDIT_BUREAU_YEAR'
+            ]
+            for col in basic_numerical_cols:
+                features_dict[col] = float(form_data[col])
+            
+            # Clean employment years (cap negative values to 0.0)
+            if features_dict['EMPLOYMENT_YEARS'] < 0:
+                features_dict['EMPLOYMENT_YEARS'] = 0.0
+                
+            # Engineer credit risk ratio features dynamically
+            features_dict['ANNUITY_TO_INCOME_RATIO'] = features_dict['AMT_ANNUITY'] / (features_dict['AMT_INCOME_TOTAL'] + 1e-5)
+            features_dict['INCOME_TO_CREDIT_RATIO'] = features_dict['AMT_INCOME_TOTAL'] / (features_dict['AMT_CREDIT'] + 1e-5)
+            features_dict['CREDIT_TO_ANNUITY_RATIO'] = features_dict['AMT_CREDIT'] / (features_dict['AMT_ANNUITY'] + 1e-5)
+            features_dict['INCOME_PER_FAMILY_MEMBER'] = features_dict['AMT_INCOME_TOTAL'] / (features_dict['CNT_FAM_MEMBERS'] + 1e-5)
+            
             # 4. Construct input DataFrame and Reorder Columns exactly
             input_df = pd.DataFrame([features_dict])
             
             # Safety checks for columns and feature count matching
             if len(input_df.columns) != len(registry.feature_columns):
-                raise ValueError("Internal Feature Alignment Error: Constructed input shape does not match configuration.")
+                raise ValueError(f"Internal Feature Alignment Error: Constructed input shape has {len(input_df.columns)} columns, but registry expects {len(registry.feature_columns)}.")
                 
             input_df = input_df[registry.feature_columns]
 
             # 5. Scaling Numerical Columns
-            numerical_cols = [
-                'CNT_CHILDREN', 'CNT_FAM_MEMBERS', 'AGE_YEARS', 'EMPLOYMENT_YEARS',
-                'AMT_INCOME_TOTAL', 'AMT_CREDIT', 'AMT_ANNUITY', 'REGION_RATING_CLIENT',
-                'AMT_REQ_CREDIT_BUREAU_YEAR'
-            ]
+            numerical_cols = [col for col in registry.feature_columns if col not in categorical_cols]
             input_df[numerical_cols] = registry.scaler.transform(input_df[numerical_cols])
 
             # 6. Run Credit Eligibility Assessment Prediction

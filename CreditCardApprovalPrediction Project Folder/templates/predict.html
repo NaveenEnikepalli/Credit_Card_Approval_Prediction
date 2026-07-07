@@ -13,18 +13,20 @@
         <div class="form-header-box">
             <span class="form-badge">Online Eligibility Check</span>
             <h1 class="form-title">Credit Card Eligibility Portal</h1>
-            <p class="form-subtitle">Enter applicant professional, financial, and demographic details below to check card approval eligibility.</p>
+            <p class="form-subtitle">Enter applicant professional, financial, and demographic details below to check
+                card approval eligibility.</p>
         </div>
 
         <!-- Form Card wrapper -->
         <div class="form-card">
             {% if error_alert %}
-            <div class="alert-box error-alert-box" style="background-color: #fef2f2; border: 1px solid #fca5a5; border-radius: 6px; padding: 16px; margin-bottom: 24px; color: #b91c1c; font-family: var(--font-title); font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+            <div class="alert-box error-alert-box"
+                style="background-color: #fef2f2; border: 1px solid #fca5a5; border-radius: 6px; padding: 16px; margin-bottom: 24px; color: #b91c1c; font-family: var(--font-title); font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
                 <span>⚠️</span> {{ error_alert }}
             </div>
             {% endif %}
             <form id="prediction-form" action="{{ url_for('predict') }}" method="POST" novalidate>
-                
+
                 <!-- SECTION 1: APPLICANT PROFILE -->
                 <fieldset class="form-group-section">
                     <legend class="section-legend"><span class="legend-num">1</span> Applicant Profile</legend>
@@ -42,11 +44,12 @@
                             </select>
                             <span class="error-msg" id="error-code_gender"></span>
                         </div>
-                        
+
                         <!-- Own Car -->
                         <div class="form-field">
                             <label for="flag_own_car">Owns a Car? <span class="required">*</span>
-                                <span class="field-tooltip" title="Indicates whether the applicant owns a personal vehicle.">?</span>
+                                <span class="field-tooltip"
+                                    title="Indicates whether the applicant owns a personal vehicle.">?</span>
                             </label>
                             <select id="flag_own_car" name="FLAG_OWN_CAR" required>
                                 <option value="" disabled selected>Select Option</option>
@@ -59,7 +62,8 @@
                         <!-- Own Realty -->
                         <div class="form-field">
                             <label for="flag_own_realty">Owns Real Estate / Property? <span class="required">*</span>
-                                <span class="field-tooltip" title="Indicates whether the applicant owns real estate property or house.">?</span>
+                                <span class="field-tooltip"
+                                    title="Indicates whether the applicant owns real estate property or house.">?</span>
                             </label>
                             <select id="flag_own_realty" name="FLAG_OWN_REALTY" required>
                                 <option value="" disabled selected>Select Option</option>
@@ -78,9 +82,11 @@
                         <!-- Age -->
                         <div class="form-field">
                             <label for="age_years">Age (Years) <span class="required">*</span>
-                                <span class="field-tooltip" title="Applicant's current age. Acceptable range is 18 to 100 years.">?</span>
+                                <span class="field-tooltip"
+                                    title="Applicant's current age. Acceptable range is 18 to 100 years.">?</span>
                             </label>
-                            <input type="number" id="age_years" name="AGE_YEARS" placeholder="e.g. 35" min="18" max="100" required>
+                            <input type="number" id="age_years" name="AGE_YEARS" placeholder="e.g. 35" min="18"
+                                max="100" required>
                             <span class="field-helper">Allowed: 18 – 100 years</span>
                             <span class="error-msg" id="error-age_years"></span>
                         </div>
@@ -88,9 +94,11 @@
                         <!-- Employment Years -->
                         <div class="form-field">
                             <label for="employment_years">Employment Duration (Years) <span class="required">*</span>
-                                <span class="field-tooltip" title="Length of current professional employment in years. Max limit: 60 years. Enter 0 if unemployed.">?</span>
+                                <span class="field-tooltip"
+                                    title="Length of current professional employment in years. Max limit: 60 years. Enter 0 if unemployed.">?</span>
                             </label>
-                            <input type="number" id="employment_years" name="EMPLOYMENT_YEARS" step="0.1" placeholder="e.g. 5.5" min="0" max="60" required>
+                            <input type="number" id="employment_years" name="EMPLOYMENT_YEARS" step="0.1"
+                                placeholder="e.g. 5.5" min="0" max="60" required>
                             <span class="field-helper">Allowed: 0 – 60 years</span>
                             <span class="error-msg" id="error-employment_years"></span>
                         </div>
@@ -98,9 +106,11 @@
                         <!-- Children -->
                         <div class="form-field">
                             <label for="cnt_children">Number of Children <span class="required">*</span>
-                                <span class="field-tooltip" title="Total count of applicant's children. Maximum accepted is 20.">?</span>
+                                <span class="field-tooltip"
+                                    title="Total count of applicant's children. Maximum accepted is 20.">?</span>
                             </label>
-                            <input type="number" id="cnt_children" name="CNT_CHILDREN" placeholder="e.g. 0" min="0" max="20" required>
+                            <input type="number" id="cnt_children" name="CNT_CHILDREN" placeholder="e.g. 0" min="0"
+                                max="20" required>
                             <span class="field-helper">Allowed: 0 – 20</span>
                             <span class="error-msg" id="error-cnt_children"></span>
                         </div>
@@ -108,9 +118,11 @@
                         <!-- Family Members -->
                         <div class="form-field">
                             <label for="cnt_fam_members">Family Size <span class="required">*</span>
-                                <span class="field-tooltip" title="Total family members in the applicant's household. Range: 1 to 20.">?</span>
+                                <span class="field-tooltip"
+                                    title="Total family members in the applicant's household. Range: 1 to 20.">?</span>
                             </label>
-                            <input type="number" id="cnt_fam_members" name="CNT_FAM_MEMBERS" placeholder="e.g. 2" min="1" max="20" required>
+                            <input type="number" id="cnt_fam_members" name="CNT_FAM_MEMBERS" placeholder="e.g. 2"
+                                min="1" max="20" required>
                             <span class="field-helper">Allowed: 1 – 20</span>
                             <span class="error-msg" id="error-cnt_fam_members"></span>
                         </div>
@@ -124,9 +136,11 @@
                         <!-- Income -->
                         <div class="form-field">
                             <label for="amt_income_total">Annual Income (₹) <span class="required">*</span>
-                                <span class="field-tooltip" title="Total annual income in INR. Must be greater than zero.">?</span>
+                                <span class="field-tooltip"
+                                    title="Total annual income in INR. Must be greater than zero.">?</span>
                             </label>
-                            <input type="number" id="amt_income_total" name="AMT_INCOME_TOTAL" placeholder="e.g. 900000" min="1" required>
+                            <input type="number" id="amt_income_total" name="AMT_INCOME_TOTAL" placeholder="e.g. 900000"
+                                min="1" required>
                             <span class="field-helper">Must be greater than 0</span>
                             <span class="error-msg" id="error-amt_income_total"></span>
                         </div>
@@ -134,9 +148,11 @@
                         <!-- Credit Amount -->
                         <div class="form-field">
                             <label for="amt_credit">Requested Credit Limit (₹) <span class="required">*</span>
-                                <span class="field-tooltip" title="Total requested credit line limit. Must be greater than zero.">?</span>
+                                <span class="field-tooltip"
+                                    title="Total requested credit line limit. Must be greater than zero.">?</span>
                             </label>
-                            <input type="number" id="amt_credit" name="AMT_CREDIT" placeholder="e.g. 250000" min="1" required>
+                            <input type="number" id="amt_credit" name="AMT_CREDIT" placeholder="e.g. 250000" min="1"
+                                required>
                             <span class="field-helper">Must be greater than 0</span>
                             <span class="error-msg" id="error-amt_credit"></span>
                         </div>
@@ -144,9 +160,11 @@
                         <!-- Loan Annuity -->
                         <div class="form-field">
                             <label for="amt_annuity">Monthly EMI / Annuity (₹) <span class="required">*</span>
-                                <span class="field-tooltip" title="Estimated monthly or annual payment due for the card. Must be greater than zero.">?</span>
+                                <span class="field-tooltip"
+                                    title="Estimated monthly or annual payment due for the card. Must be greater than zero.">?</span>
                             </label>
-                            <input type="number" id="amt_annuity" name="AMT_ANNUITY" placeholder="e.g. 15000" min="1" required>
+                            <input type="number" id="amt_annuity" name="AMT_ANNUITY" placeholder="e.g. 15000" min="1"
+                                required>
                             <span class="field-helper">Must be greater than 0</span>
                             <span class="error-msg" id="error-amt_annuity"></span>
                         </div>
@@ -228,8 +246,10 @@
 
                         <!-- Organization Type -->
                         <div class="form-field form-field-full">
-                            <label for="organization_type">Employment Industry / Organization <span class="required">*</span>
-                                <span class="field-tooltip" title="The industry or type of organization where the applicant works.">?</span>
+                            <label for="organization_type">Employment Industry / Organization <span
+                                    class="required">*</span>
+                                <span class="field-tooltip"
+                                    title="The industry or type of organization where the applicant works.">?</span>
                             </label>
                             <select id="organization_type" name="ORGANIZATION_TYPE" required>
                                 <option value="" disabled selected>Select Organization Category</option>
@@ -304,7 +324,8 @@
                         <!-- Region Rating -->
                         <div class="form-field">
                             <label for="region_rating_client">Region Development Rating <span class="required">*</span>
-                                <span class="field-tooltip" title="Internal ranking score of client's residential region. (1: High development, 3: Lower development)">?</span>
+                                <span class="field-tooltip"
+                                    title="Internal ranking score of client's residential region. (1: High development, 3: Lower development)">?</span>
                             </label>
                             <select id="region_rating_client" name="REGION_RATING_CLIENT" required>
                                 <option value="" disabled selected>Select Region Rating</option>
@@ -317,10 +338,13 @@
 
                         <!-- Credit Bureau Requests -->
                         <div class="form-field">
-                            <label for="amt_req_credit_bureau_year">Credit Bureau Queries (Last Year) <span class="required">*</span>
-                                <span class="field-tooltip" title="Total inquiry requests made to credit bureau databases regarding the client. Must be 0 or greater.">?</span>
+                            <label for="amt_req_credit_bureau_year">Credit Bureau Queries (Last Year) <span
+                                    class="required">*</span>
+                                <span class="field-tooltip"
+                                    title="Total inquiry requests made to credit bureau databases regarding the client. Must be 0 or greater.">?</span>
                             </label>
-                            <input type="number" id="amt_req_credit_bureau_year" name="AMT_REQ_CREDIT_BUREAU_YEAR" placeholder="e.g. 1" min="0" required>
+                            <input type="number" id="amt_req_credit_bureau_year" name="AMT_REQ_CREDIT_BUREAU_YEAR"
+                                placeholder="e.g. 1" min="0" required>
                             <span class="field-helper">Allowed: 0 or greater</span>
                             <span class="error-msg" id="error-amt_req_credit_bureau_year"></span>
                         </div>
